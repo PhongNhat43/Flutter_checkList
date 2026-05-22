@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flutter Learning Academy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      flex: 1;
+      min-width: 220px;
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid #334155;
+    }
+
+    .stat-title {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .progress-wrapper {
+      width: 100%;
+      height: 12px;
+      background: #334155;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #6366f1);
+      transition: width 0.3s ease;
+    }
+
+    .phase {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .phase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .phase-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .phase-progress {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .task-group {
+      margin-bottom: 24px;
+    }
+
+    .task-group-title {
+      font-size: 18px;
+      margin-bottom: 14px;
+      color: #cbd5e1;
+    }
+
+    .task {
+      justify-content: space-between;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: #0f172a;
+      transition: 0.2s ease;
+    }
+
+    .task:hover {
+      background: #111c33;
+    }
+
+    .task input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .task label {
+      flex: 1;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    .task-actions {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-shrink:0;
+    }
+
+    .task-detail-btn {
+      border: 1px solid #334155;
+      background: transparent;
+      color: #93c5fd;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .task-detail-btn:hover {
+      background:#1e293b;
+      border-color:#60a5fa;
+    }
+
+    .detail-panel {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      margin-top: 10px;
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 14px;
+      display: none;
+      color: #cbd5e1;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .detail-panel.show {
+      display: block;
+    }
+
+    .detail-content {
+      white-space: pre-line;
+      line-height: 1.9;
+      color: #dbeafe;
+      margin-top: 12px;
+    }
+
+    .note-box {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid #334155;
+    }
+
+    .note-box textarea {
+      min-height: 90px;
+      font-size: 13px;
+      background:#020617;
+    }
+
+    .note-label {
+      font-size:13px;
+      margin-bottom:10px;
+      color:#93c5fd;
+      font-weight:600;
+    }
+
+    .detail-title {
+      color: #93c5fd;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .task.completed label {
+      text-decoration: line-through;
+      color: #64748b;
+    }
+
+    .notes {
+      margin-top: 32px;
+      background: #1e293b;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #334155;
+    }
+
+    .notes h2 {
+      margin-bottom: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px;
+      color: white;
+      resize: vertical;
+      font-size: 14px;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .reset-btn {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 12px;
+      background: #ef4444;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .reset-btn:hover {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 26px;
+      }
+
+      .phase-title {
+        font-size: 18px;
+      }
+
+      .stat-value {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 class="title">🚀 Flutter Learning Academy</h1>
+        <p class="subtitle">
+          Một cuốn giáo trình học Flutter tương tác dành cho iOS Developer và người mới bắt đầu
+        </p>
+      </div>
+
+      <button class="reset-btn" onclick="resetProgress()">
+        Reset Progress
+      </button>
+                    </div>
+                  </div>
+
+                  <div class="stats">
+      <div class="stat-card">
+        <div class="stat-title">Tổng tiến độ</div>
+        <div class="stat-value" id="progressPercent">0%</div>
+
+        <div class="progress-wrapper">
+          <div class="progress-bar" id="mainProgressBar"></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Tasks hoàn thành</div>
+        <div class="stat-value">
+          <span id="completedTasks">0</span>/<span id="totalTasks">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Mục tiêu</div>
+        <div class="stat-value">30 Days</div>
+      </div>
+    </div>
+
+    <div id="roadmap"></div>
+
+    <div class="notes">
+      <h2>📝 Learning Notes</h2>
+      <textarea
+        id="learningNotes"
+        placeholder="Ghi chú bug, insight, AI prompt, kiến thức học được..."
+      ></textarea>
+    </div>
+
+    <div class="footer">
+      Built with HTML + CSS + JavaScript + localStorage
+    </div>
+  </div>
+
+  <script>
+    const lessonDetails = {
+      'Cài Flutter SDK': `Flutter SDK là bộ công cụ chính thức được Google phát triển để build ứng dụng Flutter.
+
+Khi cài Flutter SDK, bạn đang cài:
+- Dart SDK
+- Flutter Engine
+- Flutter CLI
+- Build Tools
+- Rendering Framework
+
+Mục tiêu của bước này:
+- Có thể build app Android/iOS
+- Chạy emulator
+- Debug ứng dụng
+- Hot reload code
+
+Những thứ cần làm:
+1. Download Flutter SDK từ flutter.dev
+2. Add flutter/bin vào PATH
+3. Chạy flutter doctor
+4. Fix toàn bộ warning
+5. Kiểm tra Android/iOS toolchain
+
+Sau bài này bạn sẽ có môi trường Flutter hoàn chỉnh để bắt đầu build app.`,
+
+      'Cài Android Studio': `Android Studio là IDE phổ biến nhất để phát triển Flutter.
+
+Bạn cần Android Studio để:
+- chạy Android Emulator
+- debug Flutter app
+- cài Android SDK
+- quản lý virtual device
+
+Các bước:
+1. Cài Android Studio
+2. Cài Android SDK
+3. Tạo emulator Pixel
+4. Cài Flutter plugin
+5. Test chạy emulator
+
+Lưu ý:
+Không cần học toàn bộ Android Studio.
+Bạn chỉ cần đủ để run/debug Flutter app.`,
+
+      'Cài Flutter extension': `Flutter extension giúp IDE hiểu Flutter project.
+
+Các tính năng quan trọng:
+- Hot Reload
+- Auto Complete
+- Widget Inspector
+- Debug support
+- Flutter Outline
+
+Sau khi cài:
+- restart IDE
+- mở project Flutter
+- kiểm tra Flutter command hoạt động`,
+
+      'Chạy flutter doctor không lỗi': `flutter doctor là command quan trọng nhất khi setup Flutter.
+
+Nó sẽ kiểm tra:
+- Flutter SDK
+- Dart SDK
+- Android toolchain
+- Xcode
+- Chrome
+- VSCode/Android Studio
+
+Nguyên tắc:
+Trước khi học Flutter nghiêm túc:
+flutter doctor nên sạch warning càng nhiều càng tốt.`,
+
+      'Variable và data type': `Dart là ngôn ngữ lập trình của Flutter.
+
+Các kiểu dữ liệu quan trọng:
+- String
+- int
+- double
+- bool
+- List
+- Map
+
+Bạn không cần học toàn bộ Dart.
+Chỉ cần đủ để:
+- đọc code Flutter
+- viết UI
+- xử lý data
+- call API
+
+Đây là nền tảng cho mọi Flutter project.`,
+
+      'Function cơ bản': `Function trong Dart hoạt động khá giống Swift.
+
+Bạn cần hiểu:
+- parameter
+- return value
+- arrow function
+- async function
+
+Function giúp:
+- tách logic
+- reusable code
+- clean architecture
+
+Nguyên tắc:
+Một function chỉ nên xử lý một nhiệm vụ rõ ràng.`,
+
+      'Class và constructor': `Flutter code dùng OOP rất nhiều.
+
+Bạn cần hiểu:
+- class
+- object
+- constructor
+- property
+- method
+
+Ví dụ thực tế:
+- User model
+- Movie model
+- Product model
+
+Đây là nền tảng để parse JSON và quản lý data.`,
+
+      'Future và async/await': `Flutter app hoạt động rất nhiều với async.
+
+Ví dụ:
+- call API
+- đọc database
+- upload image
+- login request
+
+Bạn cần hiểu:
+- Future là gì
+- async function
+- await hoạt động thế nào
+- loading state
+
+Đây là kiến thức cực kỳ quan trọng trong Flutter.`,
+
+      'Null safety': `Dart sử dụng null safety để giảm crash runtime.
+
+Bạn cần hiểu:
+- String?
+- String
+- null check
+- late keyword
+- required parameter
+
+Sai lầm phổ biến:
+- force unwrap quá nhiều
+- lạm dụng ! operator
+
+Null safety giúp code an toàn hơn rất nhiều.`,
+
+      'Tạo console app': `Mục tiêu của bài này:
+- làm quen Dart syntax
+- chạy Dart app đầu tiên
+- hiểu execution flow
+
+Bạn sẽ:
+- tạo file main.dart
+- print data
+- nhận input
+- xử lý logic đơn giản`,
+
+      'Input/output dữ liệu': `Mọi app đều có input và output.
+
+Input:
+- user nhập text
+- API response
+- local storage
+
+Output:
+- UI
+- console
+- network request
+
+Hãy tập luyện flow dữ liệu thật nhiều.`,
+
+      'Xử lý list đơn giản': `List là cấu trúc dữ liệu cực kỳ quan trọng trong Flutter.
+
+Bạn sẽ dùng List cho:
+- ListView
+- data rendering
+- API response
+- state management
+
+Cần hiểu:
+- add/remove item
+- loop list
+- map list
+- filter data`,
+
+      'Commit source code lên GitHub': `GitHub là kỹ năng bắt buộc với developer.
+
+Bạn cần hiểu:
+- git init
+- git add
+- git commit
+- git push
+
+Mỗi feature hoàn thành nên commit riêng.
+Điều này giúp:
+- track progress
+- backup code
+- build portfolio`,
+
+      'StatelessWidget': `StatelessWidget dùng cho UI không thay đổi state.
+
+Ví dụ:
+- text
+- icon
+- simple card
+- static screen
+
+Nguyên tắc:
+UI càng reusable càng tốt.`,
+
+      'StatefulWidget': `StatefulWidget giúp UI thay đổi theo state.
+
+Ví dụ:
+- counter
+- loading
+- toggle
+- animation
+
+Khi setState chạy:
+Flutter rebuild UI.
+
+Đây là nền tảng của Flutter state management.`,
+
+      'Build method': `build() là nơi Flutter render UI.
+
+Mỗi lần state đổi:
+- build() chạy lại
+- widget tree rebuild
+
+Sai lầm phổ biến:
+- đặt logic nặng trong build()
+- call API trong build()
+
+Hãy giữ build() càng nhẹ càng tốt.`,
+
+      'Widget tree': `Flutter UI được tạo bằng widget tree.
+
+Hiểu widget tree là bước cực kỳ quan trọng.
+
+Mỗi UI:
+- button
+- text
+- image
+- layout
+
+...đều là widget.
+
+Flutter render UI bằng cách kết hợp widget tree.`,
+
+      'Column và Row': `Column và Row là layout cơ bản nhất.
+
+Column:
+- layout dọc
+
+Row:
+- layout ngang
+
+Bạn cần hiểu:
+- mainAxisAlignment
+- crossAxisAlignment
+- spacing
+- responsive layout`,
+
+      'Container và Padding': `Container giúp styling widget.
+Padding giúp tạo khoảng cách.
+
+Bạn sẽ dùng rất thường xuyên để:
+- spacing UI
+- background
+- border radius
+- shadow
+- alignment`,
+
+      'Expanded và Flexible': `Expanded giúp widget chiếm phần không gian còn lại.
+
+Đây là phần quan trọng để:
+- responsive UI
+- tránh overflow
+- build flexible layout`,
+
+      'ListView cơ bản': `ListView dùng để render danh sách.
+
+Ví dụ:
+- movie list
+- chat list
+- product list
+
+Bạn cần hiểu:
+- ListView.builder
+- itemCount
+- itemBuilder
+- scrolling performance`,
+
+      'Clone Login Screen': `Bài tập clone UI giúp tăng tốc học Flutter.
+
+Mục tiêu:
+- luyện layout
+- spacing
+- reusable widget
+- input field
+
+Không cần logic phức tạp ở giai đoạn này.`,
+
+      'Clone Profile Screen': `Profile Screen giúp luyện:
+- avatar UI
+- card layout
+- list tile
+- spacing
+- typography
+
+Đây là bài tập UI rất tốt cho beginner.`,
+
+      'Tạo reusable button widget': `Reusable widget là tư duy rất quan trọng.
+
+Mục tiêu:
+- tránh duplicate UI
+- dễ maintain
+- clean architecture
+
+Bạn nên bắt đầu bằng:
+- custom button
+- custom text field
+- custom card`,
+
+      'Navigator.push': `Navigator.push dùng để mở screen mới.
+
+Flutter navigation hoạt động dạng stack.
+
+Bạn cần hiểu:
+- push
+- pop
+- route flow
+- truyền data`,
+
+      'Navigator.pop': `Navigator.pop dùng để quay lại màn hình trước.
+
+Hiểu stack navigation sẽ giúp bạn:
+- debug flow
+- quản lý screen
+- hiểu app lifecycle`,
+
+      'Truyền data giữa screen': `Trong app thực tế:
+- detail screen cần data
+- edit screen cần object
+
+Bạn cần hiểu:
+- constructor parameter
+- navigation argument
+- state passing`,
+
+      'Named routes': `Named routes giúp quản lý navigation rõ ràng hơn.
+
+Phù hợp với app lớn nhiều screen.
+
+Tuy nhiên:
+Beginner không cần học quá sâu routing nâng cao ngay.`,
+
+      'Home screen': `Home screen thường là entry point của app.
+
+Bạn sẽ luyện:
+- layout
+- navigation
+- bottom navigation
+- app structure`,
+
+      'Detail screen': `Detail screen giúp luyện:
+- navigation data
+- scroll layout
+- image rendering
+- reusable section UI`,
+
+      'Settings screen': `Settings screen là bài luyện tốt cho:
+- ListTile
+- switch toggle
+- local state
+- reusable row widget`,
+
+      'Bottom navigation': `Bottom navigation rất phổ biến trong mobile app.
+
+Bạn cần hiểu:
+- selected index
+- page switching
+- persistent state`,
+
+      'Cài Dio package': `Dio là package networking phổ biến nhất Flutter.
+
+Ưu điểm:
+- interceptor
+- timeout
+- error handling
+- upload/download
+
+Dio mạnh hơn http package cơ bản.`,
+
+      'Call GET API': `GET API là request phổ biến nhất.
+
+Bạn cần hiểu:
+- async request
+- response
+- status code
+- JSON parsing`,
+
+      'Parse JSON': `API thường trả JSON.
+
+Bạn cần convert JSON thành model object.
+
+Đây là nền tảng của:
+- clean architecture
+- scalable app
+- data layer`,
+
+      'Handle loading state': `Loading state cực kỳ quan trọng với UX.
+
+Người dùng cần biết:
+- app đang load
+- request chưa xong
+- hệ thống đang xử lý`,
+
+      'Handle error state': `Network app luôn có khả năng lỗi.
+
+Bạn cần handle:
+- internet error
+- timeout
+- server error
+- empty state`,
+
+      'Movie list screen': `Movie app là project beginner rất tốt.
+
+Bạn sẽ học:
+- API
+- ListView
+- image loading
+- navigation
+- loading state`,
+
+      'Movie detail screen': `Detail screen giúp luyện:
+- truyền object
+- scroll UI
+- render detail data
+- responsive layout`,
+
+      'Search movie': `Search là feature rất thực tế.
+
+Bạn cần hiểu:
+- text field listener
+- debounce concept
+- filter data
+- API query`,
+
+      'Loading shimmer': `Shimmer loading giúp UX mượt hơn.
+
+Đây là kỹ thuật UI phổ biến trong production app hiện đại.`,
+
+      'Commit project lên GitHub': `Mỗi project hoàn chỉnh nên push GitHub.
+
+Điều này giúp:
+- build portfolio
+- track progress
+- luyện git workflow`
+    };
+
+    const roadmapData = [
+      {
+        title: 'PHASE 1 — Flutter Foundation',
+        modules: [
+          {
+            title: 'Dart Basics',
+            tasks: [
+              {
+                title: 'Cài Flutter SDK',
+                details: 'Flutter SDK là bộ công cụ chính để phát triển Flutter app. Ở phần này bạn cần cài đầy đủ môi trường development để có thể build app trên iOS và Android.',
+                subtasks: [
+                  'Cài Flutter SDK',
+                  'Cài Android Studio',
+                  'Cài Flutter extension',
+                  'Chạy flutter doctor không lỗi'
+                ]
+              },
+              {
+                title: 'Hiểu Dart cơ bản',
+                details: 'Đây là phần nền tảng của Dart. Không cần học quá sâu, chỉ cần đủ để đọc và viết Flutter code cơ bản.',
+                subtasks: [
+                  'Variable và data type',
+                  'Function cơ bản',
+                  'Class và constructor',
+                  'Future và async/await',
+                  'Null safety'
+                ]
+              },
+              {
+                title: 'Build app Dart mini',
+                subtasks: [
+                  'Tạo console app',
+                  'Input/output dữ liệu',
+                  'Xử lý list đơn giản',
+                  'Commit source code lên GitHub'
+                ]
+              }
+            ]
+          },
+          {
+            title: 'Widget Basics',
+            tasks: [
+              {
+                title: 'Hiểu widget cơ bản',
+                details: 'Widget là trái tim của Flutter. Mục tiêu là hiểu cách Flutter render UI bằng widget tree.',
+                subtasks: [
+                  'StatelessWidget',
+                  'StatefulWidget',
+                  'Build method',
+                  'Widget tree'
+                ]
+              },
+              {
+                title: 'Layout widgets',
+                subtasks: [
+                  'Column và Row',
+                  'Container và Padding',
+                  'Expanded và Flexible',
+                  'ListView cơ bản'
+                ]
+              },
+              {
+                title: 'Mini UI Practice',
+                subtasks: [
+                  'Clone Login Screen',
+                  'Clone Profile Screen',
+                  'Tạo reusable button widget'
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: 'PHASE 2 — UI + Navigation',
+        modules: [
+          {
+            title: 'Navigation',
+            tasks: [
+              {
+                title: 'Navigation cơ bản',
+                details: 'Navigation là cách di chuyển giữa các màn hình trong app Flutter. Hãy hiểu push/pop trước khi học routing nâng cao.',
+                subtasks: [
+                  'Navigator.push',
+                  'Navigator.pop',
+                  'Truyền data giữa screen',
+                  'Named routes'
+                ]
+              },
+              {
+                title: 'Build multi-screen app',
+                subtasks: [
+                  'Home screen',
+                  'Detail screen',
+                  'Settings screen',
+                  'Bottom navigation'
+                ]
+              }
+            ]
+          },
+          {
+            title: 'Networking',
+            tasks: [
+              {
+                title: 'API integration',
+                subtasks: [
+                  'Cài Dio package',
+                  'Call GET API',
+                  'Parse JSON',
+                  'Handle loading state',
+                  'Handle error state'
+                ]
+              },
+              {
+                title: 'Movie App',
+                subtasks: [
+                  'Movie list screen',
+                  'Movie detail screen',
+                  'Search movie',
+                  'Loading shimmer',
+                  'Commit project lên GitHub'
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const roadmapContainer = document.getElementById('roadmap');
+    const STORAGE_KEY = 'flutter-learning-tracker';
+
+    function createRoadmap() {
+      roadmapData.forEach((phase, phaseIndex) => {
+        const phaseEl = document.createElement('div');
+        phaseEl.className = 'phase';
+
+        phaseEl.innerHTML = `
+          <div class="phase-header">
+            <h2 class="phase-title">${phase.title}</h2>
+            <div class="phase-progress" id="phase-progress-${phaseIndex}"></div>
+          </div>
+        `;
+
+        phase.modules.forEach((module, moduleIndex) => {
+          const moduleEl = document.createElement('div');
+          moduleEl.className = 'task-group';
+
+          let tasksHTML = '';
+
+          module.tasks.forEach((task, taskIndex) => {
+            const parentTaskId = `p${phaseIndex}-m${moduleIndex}-task${taskIndex}`;
+
+            let subtasksHTML = '';
+
+            task.subtasks.forEach((subtask, subtaskIndex) => {
+              const taskId = `${parentTaskId}-sub${subtaskIndex}`;
+
+              const detailMap = {
+                'Cài Flutter SDK': `
+- Download Flutter SDK từ flutter.dev
+- Giải nén SDK vào thư mục development
+- Add flutter/bin vào PATH
+- Kiểm tra bằng flutter doctor
+- Đảm bảo iOS và Android toolchain hoạt động
+                `,
+
+                'Cài Android Studio': `
+- Download Android Studio
+- Cài Android SDK
+- Tạo Android Emulator
+- Kiểm tra emulator hoạt động
+                `,
+
+                'Chạy flutter doctor không lỗi': `
+- Mở terminal
+- Chạy flutter doctor
+- Fix toàn bộ warning
+- Đảm bảo environment OK
+                `,
+
+                'Variable và data type': `
+- Hiểu int, double, String, bool
+- Hiểu List và Map
+- Thực hành khai báo variable
+- Print dữ liệu ra console
+                `,
+
+                'Future và async/await': `
+- Hiểu async flow
+- Sử dụng Future.delayed
+- Viết async function
+- Handle loading state
+                `,
+
+                'StatelessWidget': `
+- Widget không có state
+- UI cố định sau render
+- Dùng cho component đơn giản
+- Build custom card widget
+                `,
+
+                'StatefulWidget': `
+- Widget có state thay đổi
+- Hiểu setState()
+- Rebuild UI khi state đổi
+- Tạo counter app
+                `,
+
+                'Column và Row': `
+- Layout dọc/ngang
+- mainAxisAlignment
+- crossAxisAlignment
+- Build profile UI đơn giản
+                `,
+
+                'Navigator.push': `
+- Chuyển màn hình mới
+- Hiểu navigation stack
+- Push bằng MaterialPageRoute
+- Tạo multi screen app
+                `,
+
+                'Call GET API': `
+- Dùng Dio call API
+- Hiểu network request
+- Parse JSON response
+- Render ListView dữ liệu
+                `,
+
+                'Movie list screen': `
+- Hiển thị danh sách movie
+- Load image poster
+- Scroll bằng ListView
+- Handle loading state
+                `
+              };
+
+              const detailText = detailMap[subtask] || `
+- Tìm hiểu lý thuyết cơ bản
+- Thực hành bằng mini example
+- Build thử feature nhỏ
+- Commit source code sau khi hoàn thành
+              `;
+
+              subtasksHTML += `
+                <div style="margin-bottom:12px;">
+                  <div class="task subtask" id="wrapper-${taskId}" style="margin-left: 24px; background:#111827;">
+                    <input type="checkbox" id="${taskId}" onchange="saveProgress()" />
+                    <label for="${taskId}">${subtask}</label>
+
+                    <div class="task-actions">
+                      <button
+                      class="task-detail-btn"
+                      onclick="toggleDetail('${taskId}')"
+                    >
+                      Chi tiết
+                    </button>
+                  </div>
+
+                  <div
+                    class="detail-panel"
+                    id="detail-${taskId}"
+                    style="margin-left:24px;"
+                  >
+                    <div class="detail-title">📚 ${subtask}</div>
+                    <div class="detail-content">${lessonDetails[subtask] || detailText}</div>
+
+                    <div class="note-box">
+                      <div class="note-label">📝 Personal Notes</div>
+                      <textarea
+                        placeholder="Ghi chú kiến thức, insight, lỗi gặp phải, cách hiểu riêng của bạn..."
+                        data-note-id="${taskId}"
+                        oninput="saveProgress()"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+
+            tasksHTML += `
+              <div style="margin-bottom: 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;">
+                  <div style="font-weight:700; color:#93c5fd;">
+                    📌 ${task.title}
+                  </div>
+
+                  <button
+                    class="task-detail-btn"
+                    onclick="toggleDetail('${parentTaskId}')"
+                  >
+                    Chi tiết
+                  </button>
+                </div>
+
+                <div class="detail-panel" id="detail-${parentTaskId}">
+                  <div class="detail-title">📚 Nội dung học</div>
+                  <div>${task.details || 'Chưa có nội dung chi tiết.'}</div>
+                </div>
+
+                ${subtasksHTML}
+              </div>
+            `;
+          });
+
+          moduleEl.innerHTML = `
+            <h3 class="task-group-title">${module.title}</h3>
+            ${tasksHTML}
+          `;
+
+          phaseEl.appendChild(moduleEl);
+        });
+
+        roadmapContainer.appendChild(phaseEl);
+      });
+    }
+
+    function saveProgress() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const data = {};
+
+      checkboxes.forEach(cb => {
+        data[cb.id] = cb.checked;
+
+        const wrapper = document.getElementById(`wrapper-${cb.id}`);
+
+        if (cb.checked) {
+          wrapper.classList.add('completed');
+        } else {
+          wrapper.classList.remove('completed');
+        }
+      });
+
+      data.notes = document.getElementById('learningNotes').value;
+
+      const noteInputs = document.querySelectorAll('[data-note-id]');
+
+      noteInputs.forEach(note => {
+        data[`note-${note.dataset.noteId}`] = note.value;
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+      updateStats();
+    }
+
+    function loadProgress() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+      if (!saved) return;
+
+      Object.keys(saved).forEach(key => {
+        const element = document.getElementById(key);
+
+        if (element && element.type === 'checkbox') {
+          element.checked = saved[key];
+
+          const wrapper = document.getElementById(`wrapper-${key}`);
+
+          if (saved[key]) {
+            wrapper.classList.add('completed');
+          }
+        }
+      });
+
+      const noteInputs = document.querySelectorAll('[data-note-id]');
+
+      noteInputs.forEach(note => {
+        const key = `note-${note.dataset.noteId}`;
+
+        if (saved[key]) {
+          note.value = saved[key];
+        }
+      });
+
+      if (saved.notes) {
+        document.getElementById('learningNotes').value = saved.notes;
+      }
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const total = checkboxes.length;
+      const completed = [...checkboxes].filter(cb => cb.checked).length;
+
+      const percent = Math.round((completed / total) * 100);
+
+      document.getElementById('completedTasks').innerText = completed;
+      document.getElementById('totalTasks').innerText = total;
+      document.getElementById('progressPercent').innerText = `${percent}%`;
+      document.getElementById('mainProgressBar').style.width = `${percent}%`;
+
+      updatePhaseProgress();
+    }
+
+    function updatePhaseProgress() {
+      const phases = document.querySelectorAll('.phase');
+
+      phases.forEach((phaseEl, phaseIndex) => {
+        const checkboxes = phaseEl.querySelectorAll('input[type="checkbox"]');
+        const total = checkboxes.length;
+        const completed = [...checkboxes].filter(cb => cb.checked).length;
+
+        const percent = Math.round((completed / total) * 100);
+
+        document.getElementById(`phase-progress-${phaseIndex}`).innerText = `${percent}% completed`;
+      });
+    }
+
+    function toggleDetail(id) {
+      const panel = document.getElementById(`detail-${id}`);
+
+      if (!panel) return;
+
+      panel.classList.toggle('show');
+    }
+
+    function resetProgress() {
+      const confirmReset = confirm('Bạn có chắc muốn reset toàn bộ progress không?');
+
+      if (!confirmReset) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+
+    document
+      .getElementById('learningNotes')
+      .addEventListener('input', saveProgress);
+
+    createRoadmap();
+    loadProgress();
+    updateStats();
+  </script>
+</body>
+</html>
