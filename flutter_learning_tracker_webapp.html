@@ -276,6 +276,235 @@
       opacity: 0.9;
     }
 
+    /* Detail tabs */
+    .detail-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .detail-tab-btn {
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .detail-tab-btn.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
+
+    .detail-tab-btn:hover {
+      color: #cbd5e1;
+    }
+
+    .detail-tab-content {
+      display: none;
+    }
+
+    .detail-tab-content.active {
+      display: block;
+    }
+
+    /* Learning Objectives */
+    .objectives-list {
+      list-style: none;
+      margin: 12px 0;
+    }
+
+    .objectives-list li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+      color: #dbeafe;
+    }
+
+    .objectives-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    /* Code Example */
+    .code-example {
+      background: #020617;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      color: #dbeafe;
+      line-height: 1.6;
+    }
+
+    /* Tips */
+    .tips-list {
+      list-style: none;
+      margin: 12px 0;
+    }
+
+    .tips-list li {
+      padding: 10px;
+      margin-bottom: 8px;
+      background: #1e293b;
+      border-left: 3px solid #f59e0b;
+      border-radius: 4px;
+      color: #dbeafe;
+    }
+
+    .tips-list li strong {
+      color: #fbbf24;
+    }
+
+    .gotchas-list li {
+      border-left-color: #ef4444;
+    }
+
+    .gotchas-list li strong {
+      color: #fca5a5;
+    }
+
+    /* Quiz Modal */
+    .quiz-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quiz-modal.show {
+      display: flex;
+    }
+
+    .quiz-modal-content {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid #334155;
+    }
+
+    .quiz-close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      color: #94a3b8;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .quiz-close:hover {
+      color: #f8fafc;
+    }
+
+    .quiz-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 24px;
+      clear: both;
+    }
+
+    .quiz-question {
+      margin-bottom: 24px;
+    }
+
+    .quiz-question-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #dbeafe;
+      margin-bottom: 12px;
+    }
+
+    .quiz-options {
+      list-style: none;
+    }
+
+    .quiz-option {
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .quiz-option:hover {
+      background: #111c33;
+      border-color: #60a5fa;
+    }
+
+    .quiz-option input {
+      margin-right: 8px;
+    }
+
+    .quiz-result {
+      margin-top: 24px;
+      padding: 16px;
+      background: #0f172a;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    .quiz-result.show {
+      display: block;
+    }
+
+    .quiz-result-text {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .quiz-result-correct {
+      color: #10b981;
+    }
+
+    .quiz-result-incorrect {
+      color: #ef4444;
+    }
+
+    .quiz-btn {
+      padding: 10px 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 16px;
+      width: 100%;
+      transition: 0.2s ease;
+    }
+
+    .quiz-btn:hover {
+      background: #2563eb;
+    }
+
     @media (max-width: 768px) {
       .title {
         font-size: 26px;
@@ -287,6 +516,10 @@
 
       .stat-value {
         font-size: 24px;
+      }
+
+      .quiz-modal-content {
+        padding: 20px;
       }
     }
   </style>
@@ -345,7 +578,456 @@
     </div>
   </div>
 
+  <!-- Quiz Modal -->
+  <div class="quiz-modal" id="quizModal">
+    <div class="quiz-modal-content">
+      <button class="quiz-close" onclick="closeQuiz()">×</button>
+      <div class="quiz-title" id="quizTitle">📝 Quick Quiz</div>
+      <div id="quizContent"></div>
+      <div class="quiz-result" id="quizResult">
+        <div class="quiz-result-text" id="resultText"></div>
+        <button class="quiz-btn" onclick="retakeQuiz()" style="margin-top: 8px;">Làm lại</button>
+      </div>
+      <button class="quiz-btn" onclick="submitQuiz()" id="submitBtn">Nộp bài</button>
+    </div>
+  </div>
+
   <script>
+    // Enhanced lesson data with objectives, code, tips, and quiz
+    const lessonEnhanced = {
+      'Variable và data type': {
+        objectives: [
+          'Hiểu các kiểu dữ liệu cơ bản (int, double, String, bool)',
+          'Biết cách khai báo variable',
+          'Hiểu Type inference trong Dart',
+          'Làm quen với List và Map'
+        ],
+        codeExample: `void main() {
+  // Variables
+  int age = 25;
+  double price = 19.99;
+  String name = "Flutter";
+  bool isActive = true;
+
+  // Type inference
+  var email = "user@example.com"; // Dart infers String
+
+  // Collections
+  List<int> numbers = [1, 2, 3];
+  Map<String, int> scores = {"math": 95};
+
+  print('Name: \$name, Age: \$age');
+}`,
+        tips: [
+          '<strong>Tip:</strong> Dùng <code>var</code> để Dart tự suy luận kiểu',
+          '<strong>Tip:</strong> Dùng <code>final</code> cho variable không thay đổi',
+          '<strong>Tip:</strong> Dùng <code>const</code> cho hằng số compile-time'
+        ],
+        gotchas: [
+          '<strong>Gotcha:</strong> <code>var</code> khác <code>dynamic</code>. Var suy luận 1 lần, dynamic thì không',
+          '<strong>Gotcha:</strong> String interpolation dùng <code>\$variable</code>, không phải <code>${variable}</code>',
+          '<strong>Gotcha:</strong> <code>null</code> là giá trị hợp lệ, nhưng Dart 2.12+ có null safety bắt buộc'
+        ],
+        quiz: [
+          {
+            question: 'Kiểu dữ liệu nào dùng cho số có phần thập phân?',
+            options: ['int', 'double', 'Float', 'Number'],
+            correct: 1
+          },
+          {
+            question: 'Cách nào để khai báo variable không thay đổi?',
+            options: ['var x = 5;', 'final x = 5;', 'const x = 5;', 'Cả final và const'],
+            correct: 3
+          },
+          {
+            question: 'Kết quả của \`var x = "5";\` là kiểu gì?',
+            options: ['int', 'String', 'double', 'dynamic'],
+            correct: 1
+          }
+        ]
+      },
+
+      'Function cơ bản': {
+        objectives: [
+          'Viết function cơ bản với return value',
+          'Sử dụng parameter và argument',
+          'Hiểu arrow function',
+          'Viết function với optional parameter'
+        ],
+        codeExample: `// Basic function
+int add(int a, int b) {
+  return a + b;
+}
+
+// Arrow function
+int multiply(int a, int b) => a * b;
+
+// Optional parameter
+String greet(String name, [String emoji = '👋']) {
+  return '\$emoji Hello, \$name!';
+}
+
+// Named parameter
+void setUser({
+  required String name,
+  int age = 0,
+}) {
+  print('User: \$name, Age: \$age');
+}
+
+void main() {
+  print(add(5, 3));           // 8
+  print(multiply(4, 2));      // 8
+  print(greet("Dart"));       // 👋 Hello, Dart!
+  setUser(name: "Alex", age: 25);
+}`,
+        tips: [
+          '<strong>Tip:</strong> Dùng arrow function <code>=></code> cho function ngắn 1 dòng',
+          '<strong>Tip:</strong> Dùng named parameter để code rõ ràng hơn',
+          '<strong>Tip:</strong> Optional parameter để function linh hoạt'
+        ],
+        gotchas: [
+          '<strong>Gotcha:</strong> <code>required</code> keyword là bắt buộc từ Dart 2.12+',
+          '<strong>Gotcha:</strong> Optional positional parameter dùng <code>[param]</code>, named dùng <code>{param}</code>',
+          '<strong>Gotcha:</strong> Function không return gì thì default return <code>null</code>'
+        ],
+        quiz: [
+          {
+            question: 'Cách viết arrow function cho function trả về 2 số nhân nhau?',
+            options: [
+              'int multiply(a, b) { return a * b; }',
+              'int multiply(a, b) => a * b;',
+              'multiply(a, b) => a * b;',
+              'Cả B và C'
+            ],
+            correct: 1
+          },
+          {
+            question: 'Keyword nào bắt buộc tham số trong named parameter?',
+            options: ['optional', 'required', 'final', 'const'],
+            correct: 1
+          }
+        ]
+      },
+
+      'Class và constructor': {
+        objectives: [
+          'Tạo class và object',
+          'Viết constructor',
+          'Sử dụng property và method',
+          'Hiểu this keyword'
+        ],
+        codeExample: `class User {
+  String name;
+  int age;
+  String email;
+
+  // Constructor
+  User(this.name, this.age, this.email);
+
+  // Method
+  void displayInfo() {
+    print('Name: \$name, Age: \$age, Email: \$email');
+  }
+
+  String getIntro() => 'Hi, I am \$name';
+}
+
+class Movie {
+  String title;
+  int year;
+  double rating;
+
+  Movie({
+    required this.title,
+    required this.year,
+    this.rating = 0.0,
+  });
+
+  bool isHighRated() => rating >= 8.0;
+}
+
+void main() {
+  var user = User('Alice', 25, 'alice@example.com');
+  user.displayInfo();
+
+  var movie = Movie(title: 'Avatar', year: 2009, rating: 8.0);
+  print(movie.getIntro()); // Need to add getIntro() method
+}`,
+        tips: [
+          '<strong>Tip:</strong> Dùng positional parameter cho essential properties',
+          '<strong>Tip:</strong> Dùng named parameter khi có nhiều property optional',
+          '<strong>Tip:</strong> <code>this.property</code> shorthand tiết kiệm code'
+        ],
+        gotchas: [
+          '<strong>Gotcha:</strong> Property phải khai báo type, không dùng <code>var</code>',
+          '<strong>Gotcha:</strong> Constructor tên phải giống class name',
+          '<strong>Gotcha:</strong> Dart không support overloading constructor (phải dùng named constructor)'
+        ],
+        quiz: [
+          {
+            question: 'Cách khai báo constructor tắt trong Dart?',
+            options: [
+              'User(String name, int age) { this.name = name; }',
+              'User(this.name, this.age);',
+              'User.constructor(this.name, this.age);',
+              'Cả A và B'
+            ],
+            correct: 1
+          },
+          {
+            question: 'Làm sao để tạo object với named parameter?',
+            options: [
+              'User("Alice", 25)',
+              'User(name: "Alice", age: 25)',
+              'new User("Alice", 25)',
+              'User {...}'
+            ],
+            correct: 1
+          }
+        ]
+      },
+
+      'StatelessWidget': {
+        objectives: [
+          'Tạo StatelessWidget',
+          'Viết build method',
+          'Sử dụng layout widget',
+          'Tạo reusable component'
+        ],
+        codeExample: `import 'package:flutter/material.dart';
+
+class MyCard extends StatelessWidget {
+  final String title;
+  final String description;
+
+  const MyCard({
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(16),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            SizedBox(height: 8),
+            Text(description),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home')),
+      body: ListView(
+        children: [
+          MyCard(
+            title: 'Card 1',
+            description: 'This is reusable card',
+          ),
+        ],
+      ),
+    );
+  }
+}`,
+        tips: [
+          '<strong>Tip:</strong> StatelessWidget cho UI cố định (không thay đổi)',
+          '<strong>Tip:</strong> Dùng <code>const constructor</code> để Flutter optimize rebuild',
+          '<strong>Tip:</strong> Luôn khai báo property là <code>final</code>'
+        ],
+        gotchas: [
+          '<strong>Gotcha:</strong> StatelessWidget không có setState, UI không update khi data thay đổi',
+          '<strong>Gotcha:</strong> Mỗi lần parent rebuild, StatelessWidget cũng rebuild',
+          '<strong>Gotcha:</strong> Không thể thay đổi property của StatelessWidget sau tạo'
+        ],
+        quiz: [
+          {
+            question: 'StatelessWidget dùng cho UI nào?',
+            options: [
+              'UI thay đổi theo state',
+              'UI cố định sau khi tạo',
+              'UI có animation',
+              'UI interactive'
+            ],
+            correct: 1
+          },
+          {
+            question: 'Method nào là entry point để render UI?',
+            options: ['render()', 'init()', 'build()', 'display()'],
+            correct: 2
+          }
+        ]
+      },
+
+      'StatefulWidget': {
+        objectives: [
+          'Tạo StatefulWidget và State class',
+          'Sử dụng setState',
+          'Quản lý state trong widget',
+          'Hiểu lifecycle'
+        ],
+        codeExample: `import 'package:flutter/material.dart';
+
+class Counter extends StatefulWidget {
+  @override
+  _CounterState createState() => _CounterState();
+}
+
+class _CounterState extends State<Counter> {
+  int _count = 0;
+
+  void _increment() {
+    setState(() {
+      _count++;
+    });
+  }
+
+  void _decrement() {
+    setState(() {
+      _count--;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Counter')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Count: \$_count',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _decrement,
+                  child: Text('-'),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: _increment,
+                  child: Text('+'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}`,
+        tips: [
+          '<strong>Tip:</strong> Luôn dùng StatefulWidget khi có state thay đổi',
+          '<strong>Tip:</strong> Gọi setState() trong callback khi dữ liệu thay đổi',
+          '<strong>Tip:</strong> Property state phải có prefix <code>_</code> (private)'
+        ],
+        gotchas: [
+          '<strong>Gotcha:</strong> setState() không hoàn thành ngay, Flutter batch updates',
+          '<strong>Gotcha:</strong> Không nên setState() trong build(), gây infinite loop',
+          '<strong>Gotcha:</strong> StatefulWidget có 2 class: Widget (immutable) và State (mutable)'
+        ],
+        quiz: [
+          {
+            question: 'Method nào dùng để update UI trong StatefulWidget?',
+            options: ['update()', 'setState()', 'refresh()', 'render()'],
+            correct: 1
+          },
+          {
+            question: 'StatefulWidget có bao nhiêu class?',
+            options: ['1', '2', '3', '4'],
+            correct: 1
+          }
+        ]
+      },
+
+      'Future và async/await': {
+        objectives: [
+          'Hiểu Future là gì',
+          'Sử dụng async/await',
+          'Handle async operation',
+          'Quản lý loading state'
+        ],
+        codeExample: `// Future basic
+Future<String> fetchData() {
+  return Future.delayed(Duration(seconds: 2), () {
+    return 'Data loaded!';
+  });
+}
+
+// Async/await
+Future<void> loadUser() async {
+  print('Loading...');
+  
+  final user = await fetchUserFromAPI();
+  print('User: \$user');
+}
+
+// Try-catch
+Future<String> fetchUserFromAPI() async {
+  try {
+    final response = await apiCall();
+    return response;
+  } catch (e) {
+    print('Error: \$e');
+    return '';
+  }
+}
+
+// Multiple awaits
+Future<void> main() async {
+  final data1 = await fetchData();
+  final data2 = await fetchData();
+  print('\$data1, \$data2');
+}`,
+        tips: [
+          '<strong>Tip:</strong> Dùng <code>await</code> để chờ Future hoàn thành',
+          '<strong>Tip:</strong> Dùng <code>try-catch</code> để handle error async',
+          '<strong>Tip:</strong> Dùng <code>Future.wait()</code> để chờ nhiều Future cùng lúc'
+        ],
+        gotchas: [
+          '<strong>Gotcha:</strong> Quên <code>await</code> sẽ trả về Future object chứ không phải kết quả',
+          '<strong>Gotcha:</strong> Không thể dùng <code>await</code> ngoài <code>async</code> function',
+          '<strong>Gotcha:</strong> <code>async</code> function luôn return Future'
+        ],
+        quiz: [
+          {
+            question: 'Cách nào để chờ Future hoàn thành?',
+            options: [
+              'wait(future)',
+              'future.wait()',
+              'await future',
+              'future.await()'
+            ],
+            correct: 2
+          },
+          {
+            question: '<code>async</code> function luôn return kiểu gì?',
+            options: ['void', 'Future', 'String', 'dynamic'],
+            correct: 1
+          }
+        ]
+      }
+    };
+
     const lessonDetails = {
       'Cài Flutter SDK': `Flutter SDK là bộ công cụ chính thức được Google phát triển để build ứng dụng Flutter.
 
@@ -1079,9 +1761,63 @@ Bạn cần hiểu:
                     class="detail-panel"
                     id="detail-${taskId}"
                     style="margin-left:24px;"
+                    data-lesson="${subtask}"
                   >
-                    <div class="detail-title">📚 ${subtask}</div>
-                    <div class="detail-content">${lessonDetails[subtask] || detailText}</div>
+                    <div class="detail-tabs">
+                      <button class="detail-tab-btn active" data-tab="content" onclick="switchTab('content', '${subtask}')">📚 Nội dung</button>
+                      ${lessonEnhanced[subtask] ? `
+                        <button class="detail-tab-btn" data-tab="objectives" onclick="switchTab('objectives', '${subtask}')">🎯 Mục tiêu</button>
+                        <button class="detail-tab-btn" data-tab="code" onclick="switchTab('code', '${subtask}')">💻 Code</button>
+                        <button class="detail-tab-btn" data-tab="tips" onclick="switchTab('tips', '${subtask}')">💡 Tips</button>
+                        <button class="detail-tab-btn" data-tab="quiz" onclick="switchTab('quiz', '${subtask}')">📝 Quiz</button>
+                      ` : ''}
+                    </div>
+
+                    <!-- Content Tab -->
+                    <div class="detail-tab-content active" data-tab="content">
+                      <div class="detail-title">📚 ${subtask}</div>
+                      <div class="detail-content">${lessonDetails[subtask] || 'Chưa có nội dung chi tiết.'}</div>
+                    </div>
+
+                    ${lessonEnhanced[subtask] ? `
+                      <!-- Objectives Tab -->
+                      <div class="detail-tab-content" data-tab="objectives">
+                        <div class="detail-title">🎯 Mục tiêu học tập</div>
+                        <ul class="objectives-list">
+                          ${lessonEnhanced[subtask].objectives.map(obj => `<li>${obj}</li>`).join('')}
+                        </ul>
+                      </div>
+
+                      <!-- Code Example Tab -->
+                      <div class="detail-tab-content" data-tab="code">
+                        <div class="detail-title">💻 Code Example</div>
+                        <pre class="code-example">${lessonEnhanced[subtask].codeExample}</pre>
+                      </div>
+
+                      <!-- Tips Tab -->
+                      <div class="detail-tab-content" data-tab="tips">
+                        <div class="detail-title">💡 Tips & Gotchas</div>
+                        <div style="margin-bottom: 16px;">
+                          <h4 style="color: #38bdf8; margin-bottom: 8px;">✨ Tips:</h4>
+                          <ul class="tips-list">
+                            ${lessonEnhanced[subtask].tips.map(t => `<li>${t}</li>`).join('')}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 style="color: #ef4444; margin-bottom: 8px;">⚠️ Gotchas:</h4>
+                          <ul class="tips-list gotchas-list">
+                            ${lessonEnhanced[subtask].gotchas.map(g => `<li>${g}</li>`).join('')}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <!-- Quiz Tab -->
+                      <div class="detail-tab-content" data-tab="quiz">
+                        <div class="detail-title">📝 Quick Quiz</div>
+                        <p style="color: #cbd5e1; margin-bottom: 12px;">Kiểm tra hiểu biết của bạn với ${lessonEnhanced[subtask].quiz.length} câu hỏi</p>
+                        <button class="quiz-btn" onclick="startQuiz('${subtask}')" style="width: 100%;">Bắt đầu Quiz</button>
+                      </div>
+                    ` : ''}
 
                     <div class="note-box">
                       <div class="note-label">📝 Personal Notes</div>
@@ -1242,6 +1978,99 @@ Bạn cần hiểu:
 
       localStorage.removeItem(STORAGE_KEY);
       location.reload();
+    }
+
+    // Quiz functions
+    let currentQuiz = null;
+    let quizAnswers = {};
+
+    function startQuiz(lessonTitle) {
+      currentQuiz = lessonEnhanced[lessonTitle]?.quiz;
+      
+      if (!currentQuiz) {
+        alert('Bài này chưa có quiz. Sắp tới sẽ có! 🎓');
+        return;
+      }
+
+      quizAnswers = {};
+      document.getElementById('quizTitle').textContent = `📝 Quiz: ${lessonTitle}`;
+      document.getElementById('quizResult').classList.remove('show');
+      document.getElementById('submitBtn').style.display = 'block';
+
+      let quizHTML = '';
+      currentQuiz.forEach((q, idx) => {
+        quizHTML += `
+          <div class="quiz-question">
+            <div class="quiz-question-text">Câu ${idx + 1}: ${q.question}</div>
+            <ul class="quiz-options">
+              ${q.options.map((opt, optIdx) => `
+                <li class="quiz-option">
+                  <input 
+                    type="radio" 
+                    name="q${idx}" 
+                    value="${optIdx}"
+                    onchange="quizAnswers['${idx}'] = '${optIdx}'"
+                  />
+                  ${opt}
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+      });
+
+      document.getElementById('quizContent').innerHTML = quizHTML;
+      document.getElementById('quizModal').classList.add('show');
+    }
+
+    function submitQuiz() {
+      if (!currentQuiz) return;
+
+      let correct = 0;
+      currentQuiz.forEach((q, idx) => {
+        if (quizAnswers[idx] != null && parseInt(quizAnswers[idx]) === q.correct) {
+          correct++;
+        }
+      });
+
+      const percentage = Math.round((correct / currentQuiz.length) * 100);
+      const resultText = document.getElementById('resultText');
+
+      if (percentage >= 80) {
+        resultText.innerHTML = `✅ Tuyệt vời! Bạn được ${percentage}% (${correct}/${currentQuiz.length})`;
+        resultText.className = 'quiz-result-text quiz-result-correct';
+      } else if (percentage >= 50) {
+        resultText.innerHTML = `⚠️ Khá! Bạn được ${percentage}% (${correct}/${currentQuiz.length})`;
+        resultText.className = 'quiz-result-text';
+      } else {
+        resultText.innerHTML = `❌ Cần ôn lại. Bạn được ${percentage}% (${correct}/${currentQuiz.length})`;
+        resultText.className = 'quiz-result-text quiz-result-incorrect';
+      }
+
+      document.getElementById('quizResult').classList.add('show');
+      document.getElementById('submitBtn').style.display = 'none';
+    }
+
+    function retakeQuiz() {
+      startQuiz(document.getElementById('quizTitle').textContent.replace('📝 Quiz: ', ''));
+    }
+
+    function closeQuiz() {
+      document.getElementById('quizModal').classList.remove('show');
+      currentQuiz = null;
+      quizAnswers = {};
+    }
+
+    // Tab functions
+    function switchTab(tabName, lessonTitle) {
+      const tabs = document.querySelectorAll(`[data-lesson="${lessonTitle}"] .detail-tab-btn`);
+      const contents = document.querySelectorAll(`[data-lesson="${lessonTitle}"] .detail-tab-content`);
+
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+
+      document.querySelector(`[data-lesson="${lessonTitle}"] .detail-tab-btn[data-tab="${tabName}"]`).classList.add('active');
+      document.querySelector(`[data-lesson="${lessonTitle}"] .detail-tab-content[data-tab="${tabName}"]`).classList.add('active');
     }
 
     document
